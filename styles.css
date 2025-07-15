@@ -467,8 +467,7 @@ body {
 /* Hero Section */
 .hero {
     height: 100vh;
-    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-                url('C:\Users\DELL\Downloads\Waswiseproj\project\0075520f-3950-4b5d-8d5a-95c1a925e64f.png') center/cover;
+    background-image: url('/0075520f-3950-4b5d-8d5a-95c1a925e64f.png');
     display: flex;
     align-items: center;
     justify-content: center;
