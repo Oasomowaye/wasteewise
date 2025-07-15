@@ -1,0 +1,563 @@
+/* Recycle Page Specific Styles */
+.recycle-content {
+    padding: 2rem;
+    flex: 1;
+}
+
+.recycle-header {
+    margin-bottom: 2rem;
+}
+
+.recycle-header h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.recycle-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+.recycle-form-section {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Service Tabs */
+.service-tabs {
+    display: flex;
+    margin-bottom: 2rem;
+    background: #f3f4f6;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.tab-btn.active {
+    background: #22c55e;
+    color: white;
+    box-shadow: 0 2px 4px rgba(34, 197, 94, 0.2);
+}
+
+.tab-btn:hover:not(.active) {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+/* Pickup Form Layout */
+.pickup-form {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 3rem;
+    align-items: start;
+}
+
+.pickup-form-left {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.pickup-form-right {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pickup-image {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 8px solid #22c55e;
+    box-shadow: 0 10px 30px rgba(34, 197, 94, 0.3);
+    position: relative;
+}
+
+.pickup-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.form-label i {
+    color: #22c55e;
+    font-size: 0.875rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.875rem;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    transition: border-color 0.3s ease;
+    background: white;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+}
+
+.form-input::placeholder {
+    color: #9ca3af;
+}
+
+/* Pickup Note */
+.pickup-note {
+    background: #fef3c7;
+    border: 1px solid #fbbf24;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.pickup-note p {
+    color: #92400e;
+    font-size: 0.875rem;
+    margin: 0;
+    text-align: center;
+}
+
+/* Date Input */
+.date-input-wrapper {
+    position: relative;
+}
+
+.date-input {
+    padding-right: 2.5rem;
+}
+
+.date-icon {
+    position: absolute;
+    right: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    pointer-events: none;
+}
+
+/* Time Inputs */
+.time-inputs {
+    display: flex;
+    gap: 1rem;
+}
+
+.time-input-wrapper {
+    position: relative;
+    flex: 1;
+}
+
+.time-input {
+    padding-right: 2.5rem;
+}
+
+.time-icon {
+    position: absolute;
+    right: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    pointer-events: none;
+}
+
+/* Request Button */
+.request-btn {
+    width: 100%;
+    background: #22c55e;
+    color: white;
+    border: none;
+    padding: 1rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.request-btn:hover {
+    background: #16a34a;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.3);
+}
+
+/* Dropoff Form */
+.dropoff-form {
+    display: block;
+}
+
+.dropoff-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+    border-radius: 15px;
+    padding: 2rem;
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.dropoff-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50%;
+    height: 100%;
+    background: url('https://images.pexels.com/photos/2827392/pexels-photo-2827392.jpeg?auto=compress&cs=tinysrgb&w=800') center/cover;
+    opacity: 0.3;
+    border-radius: 0 15px 15px 0;
+}
+
+.dropoff-left {
+    position: relative;
+    z-index: 2;
+}
+
+.dropoff-right {
+    position: relative;
+    z-index: 2;
+}
+
+.address-input-group {
+    margin-bottom: 2rem;
+}
+
+.address-input-group .form-label {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.address-input-group .form-input {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    color: #1f2937;
+}
+
+.address-input-group .form-input::placeholder {
+    color: #6b7280;
+}
+
+/* Recycling Centers List */
+.recycling-centers {
+    margin-bottom: 2rem;
+}
+
+.recycling-centers h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.center-item {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 0.75rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+}
+
+.center-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateX(5px);
+}
+
+.center-name {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.25rem;
+}
+
+.center-address {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 0.25rem;
+}
+
+.center-phone {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.center-arrow {
+    float: right;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.875rem;
+    margin-top: -1.5rem;
+}
+
+/* Current Prices Section */
+.current-prices {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 10px;
+    padding: 1.5rem;
+    color: #1f2937;
+}
+
+.current-prices h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #1f2937;
+}
+
+.price-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.price-item:last-child {
+    border-bottom: none;
+}
+
+.price-item-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.price-icon {
+    width: 32px;
+    height: 32px;
+    background: #22c55e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.875rem;
+}
+
+.price-icon.pet {
+    background: #22c55e;
+}
+
+.price-icon.paper {
+    background: #22c55e;
+}
+
+.price-icon.carton {
+    background: #22c55e;
+}
+
+.price-icon.iron {
+    background: #22c55e;
+}
+
+.price-icon.aluminum {
+    background: #22c55e;
+}
+
+.price-icon.pure-water {
+    background: #22c55e;
+}
+
+.price-icon.rubber {
+    background: #22c55e;
+}
+
+.price-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+}
+
+.price-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .pickup-form {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .pickup-form-right {
+        order: -1;
+    }
+    
+    .pickup-image {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .dropoff-container {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .dropoff-container::before {
+        width: 100%;
+        height: 50%;
+        top: 50%;
+        border-radius: 0 0 15px 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .recycle-content {
+        padding: 1rem;
+    }
+    
+    .recycle-form-section {
+        padding: 1.5rem;
+    }
+    
+    .pickup-form {
+        gap: 1.5rem;
+    }
+    
+    .pickup-image {
+        width: 180px;
+        height: 180px;
+        border-width: 6px;
+    }
+    
+    .dropoff-container {
+        padding: 1.5rem;
+    }
+    
+    .time-inputs {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .current-prices {
+        padding: 1rem;
+    }
+    
+    .price-item {
+        padding: 0.5rem 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .recycle-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .service-tabs {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+    
+    .tab-btn {
+        padding: 0.75rem;
+    }
+    
+    .pickup-image {
+        width: 150px;
+        height: 150px;
+        border-width: 4px;
+    }
+    
+    .form-input {
+        padding: 0.75rem;
+    }
+    
+    .request-btn {
+        padding: 0.875rem;
+    }
+    
+    .dropoff-container {
+        padding: 1rem;
+    }
+    
+    .price-item-left {
+        gap: 0.5rem;
+    }
+    
+    .price-icon {
+        width: 28px;
+        height: 28px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Animation for form switching */
+.pickup-form, .dropoff-form {
+    animation: fadeInUp 0.3s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Loading state for buttons */
+.request-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.request-btn.loading::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spin 1s linear infinite;
+    margin-left: 0.5rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

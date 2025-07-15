@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - WasteWise</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="database.js"></script>
+    <script src="admin-auth.js"></script>
+    <script src="theme-manager.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2 class="brand-name">WASTEWISE</h2>
+                <div class="admin-badge">Admin Panel</div>
+            </div>
+            
+            <nav class="admin-nav">
+                <ul>
+                    <li class="nav-item active">
+                        <a href="#dashboard" class="nav-link" data-section="dashboard">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#users" class="nav-link" data-section="users">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#transactions" class="nav-link" data-section="transactions">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transactions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin-partners.html" class="nav-link">
+                            <i class="fas fa-handshake"></i>
+                            <span>Partners</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin-pickup-requests.html" class="nav-link">
+                            <i class="fas fa-truck"></i>
+                            <span>Pickup Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#withdrawals" class="nav-link" data-section="withdrawals">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Withdrawals</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#logout" class="nav-link">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Header -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <h1>Admin Dashboard</h1>
+                </div>
+                <div class="header-right">
+                    <div class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span>Live</span>
+                    </div>
+                    <div class="admin-profile">
+                        <span>Admin</span>
+                        <div class="admin-avatar">A</div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Dashboard Content -->
+            <div class="admin-content">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card blue">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Users</h3>
+                            <div class="stat-value" id="totalUsers">0</div>
+                            <p>Active registered users</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card green">
+                        <div class="stat-icon">
+                            <i class="fas fa-recycle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Recycled</h3>
+                            <div class="stat-value" id="totalRecycled">0 kg</div>
+                            <p>Total waste recycled</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card orange">
+                        <div class="stat-icon">
+                            <i class="fas fa-coins"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Points</h3>
+                            <div class="stat-value" id="totalPoints">0</div>
+                            <p>Points earned by users</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card teal">
+                        <div class="stat-icon">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Total Withdrawals</h3>
+                            <div class="stat-value" id="totalWithdrawals">₦0.00</div>
+                            <p>Total amount withdrawn</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card purple">
+                        <div class="stat-icon">
+                            <i class="fas fa-money-bill-wave"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Overall Balance</h3>
+                            <div class="stat-value" id="overallBalance">₦0.00</div>
+                            <p>Total user balances</p>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card blue">
+                        <div class="stat-icon">
+                            <i class="fas fa-truck"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Pickup Requests</h3>
+                            <div class="stat-value" id="totalPickupRequests">0</div>
+                            <p>Total pickup requests</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Dashboard Grid -->
+                <div class="dashboard-grid">
+                    <!-- Recent Users -->
+                    <div class="dashboard-section">
+                        <div class="section-header">
+                            <h2>Recent Users</h2>
+                            <button class="view-all-btn" id="viewAllUsers">View All</button>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Join Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentUsersTable">
+                                    <!-- Users will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Transactions -->
+                    <div class="dashboard-section exchange-log">
+                        <div class="section-header">
+                            <h2>Recent Transactions</h2>
+                            <button class="view-all-btn" id="viewAllTransactions">View All</button>
+                        </div>
+                        
+                        <div class="table-container">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>User</th>
+                                        <th>Amount</th>
+                                        <th>Type</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentTransactionsTable">
+                                    <!-- Transactions will be loaded dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Balance Management Section -->
+                <div class="balance-management-section">
+                    <div class="section-header">
+                        <h2>User Balance Management</h2>
+                        <button class="add-balance-btn" id="addBalanceBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Balance
+                        </button>
+                    </div>
+                    
+                    <div class="balance-search">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search users by name or email..." id="userSearchInput">
+                        </div>
+                    </div>
+                    
+                    <div class="balance-table-container">
+                        <table class="balance-table">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Balance</th>
+                                    <th>Recycling Points</th>
+                                    <th>Last Updated</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="balanceManagementTable">
+                                <!-- Balance data will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Withdrawal Requests Section -->
+                <div class="balance-management-section" id="withdrawalRequestsSection">
+                    <div class="section-header">
+                        <h2>Withdrawal Requests</h2>
+                        <span class="pending-count" id="pendingWithdrawalsCount">0 Pending</span>
+                    </div>
+                    <div class="withdrawal-table-container">
+                        <table class="balance-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>User</th>
+                                    <th>Amount</th>
+                                    <th>Bank Details</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="withdrawalRequestsTable">
+                                <!-- Withdrawal requests will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Edit Balance Modal -->
+    <div class="modal-overlay" id="editBalanceModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Edit User Balance</h3>
+                <button class="modal-close" onclick="closeModal('editBalanceModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="user-details">
+                    <div class="user-avatar-large" id="modalUserAvatar">AD</div>
+                    <div class="user-info-modal">
+                        <h4 id="modalUserName">User Name</h4>
+                        <p id="modalUserEmail">user@email.com</p>
+                    </div>
+                </div>
+                
+                <form class="balance-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Current Balance</label>
+                            <div class="balance-input-group">
+                                <span class="currency">₦</span>
+                                <input type="number" id="currentBalance" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Current Points</label>
+                            <div class="balance-input-group">
+                                <span class="currency">kg</span>
+                                <input type="number" id="currentPoints" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Action Type</label>
+                        <select id="actionType" onchange="toggleActionInputs()">
+                            <option value="add_balance">Add Balance</option>
+                            <option value="deduct_balance">Deduct Balance</option>
+                            <option value="add_points">Add Points</option>
+                            <option value="deduct_points">Deduct Points</option>
+                            <option value="set_balance">Set Balance</option>
+                            <option value="set_points">Set Points</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label id="amountLabel">Amount to Add</label>
+                        <div class="balance-input-group">
+                            <span class="currency" id="currencySymbol">₦</span>
+                            <input type="number" id="actionAmount" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Reason</label>
+                        <textarea id="actionReason" rows="3" placeholder="Provide a reason for this action..." required></textarea>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h4>Preview Changes</h4>
+                        <div class="preview-grid">
+                            <div class="preview-item">
+                                <span>New Balance:</span>
+                                <span id="previewBalance">₦0.00</span>
+                            </div>
+                            <div class="preview-item">
+                                <span>New Points:</span>
+                                <span id="previewPoints">0.0kg</span>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('editBalanceModal')">Cancel</button>
+                <button class="btn-primary" onclick="saveBalanceChanges()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Add Balance Modal -->
+    <div class="modal-overlay" id="addBalanceModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Add Balance to User</h3>
+                <button class="modal-close" onclick="closeModal('addBalanceModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="balance-form" id="addBalanceForm">
+                    <div class="form-group">
+                        <label>Select User</label>
+                        <select id="selectUser" required>
+                            <option value="">Choose a user...</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Action Type</label>
+                        <select id="bulkActionType">
+                            <option value="add_balance">Add Balance</option>
+                            <option value="add_points">Add Points</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Amount</label>
+                        <div class="balance-input-group">
+                            <span class="currency">₦</span>
+                            <input type="number" id="bulkAmount" step="0.01" min="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Reason</label>
+                        <textarea id="bulkReason" rows="3" placeholder="Provide a reason for this action..." required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('addBalanceModal')">Cancel</button>
+                <button class="btn-primary" onclick="saveBulkBalance()">Add Balance</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="admin.js"></script>
+    <script>
+        // Load theme preference on admin page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.ThemeManager) {
+                window.ThemeManager.loadUserThemePreference();
+            }
+        });
+    </script>
+</body>
+</html>

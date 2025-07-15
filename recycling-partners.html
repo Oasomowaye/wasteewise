@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycling Partners - WasteWise</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="recycling-partners.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="database.js"></script>
+    <script src="theme-manager.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="brand-name">WASTEWISE</h2>
+            </div>
+            
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1" alt="Adeoye Daniel">
+                </div>
+                <div class="user-info">
+                    <h3>Adeoye Daniel</h3>
+                    <div class="user-rating">
+                        <span class="stars">★★★★★★★★★★</span>
+                    </div>
+                </div>
+                <button class="visibility-btn" id="globalVisibilityBtn">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="transactions.html" class="nav-link">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transactions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="recycle.html" class="nav-link">
+                            <i class="fas fa-recycle"></i>
+                            <span>Recycle</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="recycling-partners.html" class="nav-link">
+                            <i class="fas fa-handshake"></i>
+                            <span>Recycling Partners</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="learn.html" class="nav-link">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Learn</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <ul>
+                    <li class="nav-item">
+                        <a href="settings.html" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Log Out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search..." id="globalSearchInput">
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="user-menu">
+                        <img src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&dpr=1" alt="User" class="user-avatar-small">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Partners Content -->
+            <div class="partners-content">
+                <div class="partners-header">
+                    <h1>Recycling Partners</h1>
+                </div>
+                
+                <div class="partners-search-section">
+                    <div class="search-box-large">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search" id="partnersSearchInput">
+                    </div>
+                </div>
+                
+                <div class="partners-grid" id="partnersGrid">
+                    <!-- Partners will be loaded dynamically -->
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination" id="pagination">
+                    <button class="pagination-btn" id="prevBtn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span class="pagination-info" id="paginationInfo">1 of 1</span>
+                    <button class="pagination-btn" id="nextBtn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Partner Profile Modal -->
+    <div class="modal-overlay" id="partnerProfileModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalPartnerName">Partner Profile</h3>
+                <button class="modal-close" onclick="closeModal('partnerProfileModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="partner-profile-content">
+                    <div class="partner-logo-large">
+                        <div class="partner-icon-large">
+                            <i class="fas fa-recycle"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="partner-details">
+                        <h4 id="modalPartnerFullName">Partner Name</h4>
+                        <div class="partner-info-grid">
+                            <div class="info-item">
+                                <label>Seller ID:</label>
+                                <span id="modalSellerId">123456</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Address:</label>
+                                <span id="modalAddress">Partner address</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Phone:</label>
+                                <span id="modalPhone">+234 000 000 0000</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Email:</label>
+                                <span id="modalEmail">partner@email.com</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Operating Hours:</label>
+                                <span id="modalHours">8:00 AM - 6:00 PM</span>
+                            </div>
+                            <div class="info-item">
+                                <label>Services:</label>
+                                <span id="modalServices">Plastic, Paper, Metal</span>
+                            </div>
+                        </div>
+                        
+                        <div class="partner-actions">
+                            <button class="action-btn primary" onclick="contactPartner()">
+                                <i class="fas fa-phone"></i>
+                                Contact Partner
+                            </button>
+                            <button class="action-btn secondary" onclick="getDirections()">
+                                <i class="fas fa-map-marker-alt"></i>
+                                Get Directions
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="recycling-partners.js"></script>
+    <script>
+        // Load user theme preference on partners page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.ThemeManager) {
+                window.ThemeManager.loadUserThemePreference();
+            }
+        });
+    </script>
+</body>
+</html>

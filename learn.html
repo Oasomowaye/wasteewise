@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn - WasteWise</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="learn.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="database.js"></script>
+    <script src="theme-manager.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="brand-name">WASTEWISE</h2>
+            </div>
+            
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1" alt="Adeoye Daniel">
+                </div>
+                <div class="user-info">
+                    <h3>Adeoye Daniel</h3>
+                    <div class="user-rating">
+                        <span class="stars">★★★★★★★★★★</span>
+                    </div>
+                </div>
+                <button class="visibility-btn" id="globalVisibilityBtn">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="transactions.html" class="nav-link">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transactions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="recycle.html" class="nav-link">
+                            <i class="fas fa-recycle"></i>
+                            <span>Recycle</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="recycling-partners.html" class="nav-link">
+                            <i class="fas fa-handshake"></i>
+                            <span>Recycling Partners</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="learn.html" class="nav-link">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Learn</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <ul>
+                    <li class="nav-item">
+                        <a href="settings.html" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Log Out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search learning materials..." id="learnSearchInput">
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="user-menu">
+                        <img src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&dpr=1" alt="User" class="user-avatar-small">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Learn Content -->
+            <div class="learn-content">
+                <div class="learn-header">
+                    <h1>Learn About Recycling</h1>
+                    <p>Discover the importance of recycling and how you can make a positive impact on the environment</p>
+                </div>
+                
+                <!-- Progress Overview -->
+                <div class="progress-overview">
+                    <div class="progress-card">
+                        <div class="progress-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="progress-info">
+                            <h3>Learning Progress</h3>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 65%"></div>
+                            </div>
+                            <p>65% Complete • 13 of 20 lessons</p>
+                        </div>
+                    </div>
+                    
+                    <div class="progress-card">
+                        <div class="progress-icon">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <div class="progress-info">
+                            <h3>Certificates Earned</h3>
+                            <div class="certificate-count">3</div>
+                            <p>Recycling Basics • Waste Sorting • Eco Impact</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Learning Categories -->
+                <div class="learning-categories">
+                    <h2>Learning Categories</h2>
+                    <div class="categories-grid">
+                        <div class="category-card" onclick="openCategory('basics')">
+                            <div class="category-icon basics">
+                                <i class="fas fa-seedling"></i>
+                            </div>
+                            <h3>Recycling Basics</h3>
+                            <p>Learn the fundamentals of recycling and why it matters for our planet</p>
+                            <div class="category-progress">
+                                <span>8/10 lessons</span>
+                                <div class="mini-progress">
+                                    <div class="mini-progress-fill" style="width: 80%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="category-card" onclick="openCategory('sorting')">
+                            <div class="category-icon sorting">
+                                <i class="fas fa-sort-amount-up"></i>
+                            </div>
+                            <h3>Waste Sorting</h3>
+                            <p>Master the art of proper waste separation and material identification</p>
+                            <div class="category-progress">
+                                <span>5/6 lessons</span>
+                                <div class="mini-progress">
+                                    <div class="mini-progress-fill" style="width: 83%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="category-card" onclick="openCategory('impact')">
+                            <div class="category-icon impact">
+                                <i class="fas fa-globe-americas"></i>
+                            </div>
+                            <h3>Environmental Impact</h3>
+                            <p>Understand how recycling helps reduce pollution and conserve resources</p>
+                            <div class="category-progress">
+                                <span>0/4 lessons</span>
+                                <div class="mini-progress">
+                                    <div class="mini-progress-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Featured Lessons -->
+                <div class="featured-lessons">
+                    <h2>Featured Lessons</h2>
+                    <div class="lessons-grid">
+                        <div class="lesson-card" onclick="openLesson('plastic-types')">
+                            <div class="lesson-image">
+                                <img src="https://images.pexels.com/photos/3735218/pexels-photo-3735218.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Plastic Types">
+                                <div class="lesson-duration">
+                                    <i class="fas fa-clock"></i>
+                                    <span>5 min</span>
+                                </div>
+                            </div>
+                            <div class="lesson-content">
+                                <h4>Understanding Plastic Types</h4>
+                                <p>Learn about different plastic recycling codes and what they mean</p>
+                                <div class="lesson-meta">
+                                    <span class="lesson-level beginner">Beginner</span>
+                                    <span class="lesson-status completed">
+                                        <i class="fas fa-check"></i>
+                                        Completed
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card" onclick="openLesson('paper-recycling')">
+                            <div class="lesson-image">
+                                <img src="https://images.pexels.com/photos/3735218/pexels-photo-3735218.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Paper Recycling">
+                                <div class="lesson-duration">
+                                    <i class="fas fa-clock"></i>
+                                    <span>7 min</span>
+                                </div>
+                            </div>
+                            <div class="lesson-content">
+                                <h4>Paper Recycling Process</h4>
+                                <p>Discover how paper is recycled and turned into new products</p>
+                                <div class="lesson-meta">
+                                    <span class="lesson-level intermediate">Intermediate</span>
+                                    <span class="lesson-status in-progress">
+                                        <i class="fas fa-play"></i>
+                                        In Progress
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lesson-card" onclick="openLesson('metal-recycling')">
+                            <div class="lesson-image">
+                                <img src="https://images.pexels.com/photos/3735218/pexels-photo-3735218.jpeg?auto=compress&cs=tinysrgb&w=400" alt="Metal Recycling">
+                                <div class="lesson-duration">
+                                    <i class="fas fa-clock"></i>
+                                    <span>6 min</span>
+                                </div>
+                            </div>
+                            <div class="lesson-content">
+                                <h4>Metal Recycling Benefits</h4>
+                                <p>Learn why metal recycling is crucial for energy conservation</p>
+                                <div class="lesson-meta">
+                                    <span class="lesson-level beginner">Beginner</span>
+                                    <span class="lesson-status new">
+                                        <i class="fas fa-star"></i>
+                                        New
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Quick Tips -->
+                <div class="quick-tips">
+                    <h2>Quick Recycling Tips</h2>
+                    <div class="tips-grid">
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fas fa-lightbulb"></i>
+                            </div>
+                            <h4>Clean Before Recycling</h4>
+                            <p>Always rinse containers to remove food residue before placing them in recycling bins</p>
+                        </div>
+                        
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fas fa-ban"></i>
+                            </div>
+                            <h4>Know What Not to Recycle</h4>
+                            <p>Items like plastic bags, electronics, and hazardous materials need special disposal</p>
+                        </div>
+                        
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fas fa-compress-arrows-alt"></i>
+                            </div>
+                            <h4>Reduce and Reuse First</h4>
+                            <p>Before recycling, consider if you can reduce consumption or reuse the item</p>
+                        </div>
+                        
+                        <div class="tip-card">
+                            <div class="tip-icon">
+                                <i class="fas fa-search"></i>
+                            </div>
+                            <h4>Check Local Guidelines</h4>
+                            <p>Recycling rules vary by location, so check your local recycling program guidelines</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Environmental Facts -->
+                <div class="environmental-facts">
+                    <h2>Did You Know?</h2>
+                    <div class="facts-carousel">
+                        <div class="fact-card active">
+                            <div class="fact-number">1</div>
+                            <div class="fact-content">
+                                <h4>Recycling one aluminum can saves enough energy to power a TV for 3 hours</h4>
+                                <p>Aluminum recycling uses 95% less energy than producing new aluminum from raw materials</p>
+                            </div>
+                        </div>
+                        
+                        <div class="fact-card">
+                            <div class="fact-number">2</div>
+                            <div class="fact-content">
+                                <h4>One recycled plastic bottle can be turned into 10 new bottles</h4>
+                                <p>Plastic recycling helps reduce the need for new plastic production and saves petroleum</p>
+                            </div>
+                        </div>
+                        
+                        <div class="fact-card">
+                            <div class="fact-number">3</div>
+                            <div class="fact-content">
+                                <h4>Recycling paper saves 17 trees per ton</h4>
+                                <p>Paper recycling also saves 7,000 gallons of water and enough energy to power a home for 6 months</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-controls">
+                        <button class="carousel-btn prev" onclick="previousFact()">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <div class="carousel-dots">
+                            <span class="dot active" onclick="showFact(0)"></span>
+                            <span class="dot" onclick="showFact(1)"></span>
+                            <span class="dot" onclick="showFact(2)"></span>
+                        </div>
+                        <button class="carousel-btn next" onclick="nextFact()">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Lesson Modal -->
+    <div class="modal-overlay" id="lessonModal">
+        <div class="modal lesson-modal">
+            <div class="modal-header">
+                <h3 id="lessonTitle">Lesson Title</h3>
+                <button class="modal-close" onclick="closeModal('lessonModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="lesson-video">
+                    <div class="video-placeholder">
+                        <i class="fas fa-play-circle"></i>
+                        <p>Video content would be displayed here</p>
+                    </div>
+                </div>
+                <div class="lesson-description" id="lessonDescription">
+                    <p>Lesson description and content would be displayed here.</p>
+                </div>
+                <div class="lesson-actions">
+                    <button class="btn-secondary" onclick="closeModal('lessonModal')">Close</button>
+                    <button class="btn-primary" onclick="markLessonComplete()">Mark as Complete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="learn.js"></script>
+    <script>
+        // Load user theme preference on learn page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.ThemeManager) {
+                window.ThemeManager.loadUserThemePreference();
+            }
+        });
+    </script>
+</body>
+</html>

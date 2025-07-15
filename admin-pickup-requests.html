@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pickup Requests - WasteWise Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-pickup-requests.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="database.js"></script>
+    <script src="theme-manager.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2 class="brand-name">WASTEWISE</h2>
+                <div class="admin-badge">Admin Panel</div>
+            </div>
+            
+            <nav class="admin-nav">
+                <ul>
+                    <li class="nav-item">
+                        <a href="admin.html" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin.html" class="nav-link" data-section="users">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin.html" class="nav-link" data-section="transactions">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transactions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin-partners.html" class="nav-link">
+                            <i class="fas fa-handshake"></i>
+                            <span>Partners</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="admin-pickup-requests.html" class="nav-link">
+                            <i class="fas fa-truck"></i>
+                            <span>Pickup Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin.html" class="nav-link" data-section="withdrawals">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Withdrawals</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#logout" class="nav-link" id="adminLogout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Header -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <h1>Pickup Requests Management</h1>
+                </div>
+                <div class="header-right">
+                    <div class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span>Live</span>
+                    </div>
+                    <div class="admin-profile">
+                        <span>Admin</span>
+                        <div class="admin-avatar">A</div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Pickup Requests Content -->
+            <div class="admin-content">
+                <!-- Pickup Requests Management Section -->
+                <div class="pickup-requests-section">
+                    <div class="pickup-requests-header">
+                        <h2>Pickup Requests</h2>
+                        <div class="requests-stats">
+                            <div class="stat-badge pending">
+                                <i class="fas fa-clock"></i>
+                                <span id="pendingCount">0 Pending</span>
+                            </div>
+                            <div class="stat-badge approved">
+                                <i class="fas fa-check"></i>
+                                <span id="approvedCount">0 Approved</span>
+                            </div>
+                            <div class="stat-badge completed">
+                                <i class="fas fa-check-double"></i>
+                                <span id="completedCount">0 Completed</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pickup-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search by user name, address, or request ID..." id="pickupSearchInput">
+                        </div>
+                        <div class="filter-controls">
+                            <select id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="pending">Pending</option>
+                                <option value="approved">Approved</option>
+                                <option value="in-progress">In Progress</option>
+                                <option value="completed">Completed</option>
+                                <option value="cancelled">Cancelled</option>
+                            </select>
+                            <select id="priorityFilter">
+                                <option value="">All Priority</option>
+                                <option value="high">High</option>
+                                <option value="medium">Medium</option>
+                                <option value="low">Low</option>
+                            </select>
+                            <select id="dateFilter">
+                                <option value="">All Dates</option>
+                                <option value="today">Today</option>
+                                <option value="tomorrow">Tomorrow</option>
+                                <option value="this-week">This Week</option>
+                                <option value="next-week">Next Week</option>
+                            </select>
+                        </div>
+                        <button class="export-btn" id="exportBtn">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                    </div>
+                    
+                    <div class="pickup-table-container">
+                        <table class="pickup-table">
+                            <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>User</th>
+                                    <th>Address</th>
+                                    <th>Pickup Schedule</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="pickupRequestsTable">
+                                <!-- Pickup requests will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Request Details Modal -->
+    <div class="modal-overlay request-details-modal" id="requestDetailsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Pickup Request Details</h3>
+                <button class="modal-close" onclick="closeModal('requestDetailsModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="request-header">
+                    <div class="request-id" id="modalRequestId">PR-001</div>
+                    <div class="request-status-large pending" id="modalRequestStatus">Pending</div>
+                </div>
+                
+                <div class="request-info-grid">
+                    <div class="info-section">
+                        <h4>User Information</h4>
+                        <div class="info-item">
+                            <span class="info-label">Name:</span>
+                            <span class="info-value" id="modalUserName">John Doe</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Email:</span>
+                            <span class="info-value" id="modalUserEmail">john@example.com</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Phone:</span>
+                            <span class="info-value" id="modalUserPhone">+234 000 000 0000</span>
+                        </div>
+                    </div>
+                    
+                    <div class="info-section">
+                        <h4>Pickup Details</h4>
+                        <div class="info-item">
+                            <span class="info-label">Date:</span>
+                            <span class="info-value" id="modalPickupDate">2025-01-15</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Time:</span>
+                            <span class="info-value" id="modalPickupTime">10:00 AM - 12:00 PM</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Priority:</span>
+                            <span class="info-value" id="modalPriority">Medium</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Created:</span>
+                            <span class="info-value" id="modalCreatedDate">2025-01-10</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="info-section">
+                    <h4>Address Information</h4>
+                    <div class="info-item">
+                        <span class="info-label">Full Address:</span>
+                        <span class="info-value" id="modalFullAddress">123 Main Street, City, State</span>
+                    </div>
+                </div>
+                
+                <div class="notes-section">
+                    <h4>Additional Notes</h4>
+                    <div class="notes-content" id="modalNotes">
+                        No additional notes provided.
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button class="btn-assign" onclick="assignPickup()">
+                        <i class="fas fa-user-plus"></i>
+                        Assign Team
+                    </button>
+                    <button class="btn-approve" onclick="approveRequest()">
+                        <i class="fas fa-check"></i>
+                        Approve
+                    </button>
+                    <button class="btn-reject" onclick="rejectRequest()">
+                        <i class="fas fa-times"></i>
+                        Reject
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Assignment Modal -->
+    <div class="modal-overlay" id="assignmentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Assign Pickup Team</h3>
+                <button class="modal-close" onclick="closeModal('assignmentModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="assignment-form" id="assignmentForm">
+                    <div class="form-group">
+                        <label>Pickup Team</label>
+                        <select id="assignTeam" required>
+                            <option value="">Select Team</option>
+                            <option value="team-1">Team Alpha (John, Mike, Sarah)</option>
+                            <option value="team-2">Team Beta (David, Lisa, Tom)</option>
+                            <option value="team-3">Team Gamma (Emma, Chris, Alex)</option>
+                            <option value="team-4">Team Delta (Maria, James, Kevin)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Scheduled Date</label>
+                        <input type="date" id="assignDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Estimated Time</label>
+                        <select id="assignTime" required>
+                            <option value="">Select Time Slot</option>
+                            <option value="08:00-10:00">8:00 AM - 10:00 AM</option>
+                            <option value="10:00-12:00">10:00 AM - 12:00 PM</option>
+                            <option value="12:00-14:00">12:00 PM - 2:00 PM</option>
+                            <option value="14:00-16:00">2:00 PM - 4:00 PM</option>
+                            <option value="16:00-18:00">4:00 PM - 6:00 PM</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Priority Level</label>
+                        <select id="assignPriority" required>
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Special Instructions</label>
+                        <textarea id="assignNotes" rows="3" placeholder="Any special instructions for the pickup team..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('assignmentModal')">Cancel</button>
+                <button class="btn-primary" onclick="saveAssignment()">Assign Team</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="admin-pickup-requests.js"></script>
+    <script>
+        // Load theme preference on pickup requests page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.ThemeManager) {
+                window.ThemeManager.loadUserThemePreference();
+            }
+        });
+    </script>
+</body>
+</html>

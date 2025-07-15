@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partners Management - WasteWise Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin-partners.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="database.js"></script>
+    <script src="theme-manager.js"></script>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-header">
+                <h2 class="brand-name">WASTEWISE</h2>
+                <div class="admin-badge">Admin Panel</div>
+            </div>
+            
+            <nav class="admin-nav">
+                <ul>
+                    <li class="nav-item">
+                        <a href="admin.html" class="nav-link">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin.html" class="nav-link" data-section="users">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin.html" class="nav-link" data-section="transactions">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transactions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="admin-partners.html" class="nav-link">
+                            <i class="fas fa-handshake"></i>
+                            <span>Partners</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin-pickup-requests.html" class="nav-link">
+                            <i class="fas fa-truck"></i>
+                            <span>Pickup Requests</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="admin.html" class="nav-link" data-section="withdrawals">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Withdrawals</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#logout" class="nav-link" id="adminLogout">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- Top Header -->
+            <header class="admin-header">
+                <div class="header-left">
+                    <h1>Partners Management</h1>
+                </div>
+                <div class="header-right">
+                    <div class="status-indicator">
+                        <span class="status-dot"></span>
+                        <span>Live</span>
+                    </div>
+                    <div class="admin-profile">
+                        <span>Admin</span>
+                        <div class="admin-avatar">A</div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Partners Content -->
+            <div class="admin-content">
+                <!-- Partners Management Section -->
+                <div class="partners-management-section">
+                    <div class="section-header">
+                        <h2>Recycling Partners</h2>
+                        <button class="add-partner-btn" id="addPartnerBtn">
+                            <i class="fas fa-plus"></i>
+                            Add Partner
+                        </button>
+                    </div>
+                    
+                    <div class="partners-controls">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" placeholder="Search partners by name, address, or services..." id="partnerSearchInput">
+                        </div>
+                        <div class="filter-controls">
+                            <select id="statusFilter">
+                                <option value="">All Status</option>
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                            <select id="serviceFilter">
+                                <option value="">All Services</option>
+                                <option value="plastic">Plastic</option>
+                                <option value="paper">Paper</option>
+                                <option value="metal">Metal</option>
+                                <option value="glass">Glass</option>
+                                <option value="electronics">Electronics</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="partners-table-container">
+                        <table class="partners-table">
+                            <thead>
+                                <tr>
+                                    <th>Partner</th>
+                                    <th>Contact Info</th>
+                                    <th>Services</th>
+                                    <th>Status</th>
+                                    <th>Rating</th>
+                                    <th>Created</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="partnersTableBody">
+                                <!-- Partners data will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Add/Edit Partner Modal -->
+    <div class="modal-overlay" id="partnerModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 id="modalTitle">Add New Partner</h3>
+                <button class="modal-close" onclick="closeModal('partnerModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="partner-form" id="partnerForm">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Partner Name *</label>
+                            <input type="text" id="partnerName" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Seller ID *</label>
+                            <input type="text" id="sellerId" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Address *</label>
+                        <textarea id="partnerAddress" rows="2" required></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Phone Number *</label>
+                            <input type="tel" id="partnerPhone" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address *</label>
+                            <input type="email" id="partnerEmail" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Operating Hours</label>
+                            <input type="text" id="operatingHours" placeholder="e.g., 8:00 AM - 6:00 PM">
+                        </div>
+                        <div class="form-group">
+                            <label>Status</label>
+                            <select id="partnerStatus">
+                                <option value="active">Active</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="pending">Pending</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Services Offered *</label>
+                        <div class="services-checkboxes">
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Plastic" class="service-checkbox">
+                                <span>Plastic</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Paper" class="service-checkbox">
+                                <span>Paper</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Metal" class="service-checkbox">
+                                <span>Metal</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Glass" class="service-checkbox">
+                                <span>Glass</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Electronics" class="service-checkbox">
+                                <span>Electronics</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Rubber" class="service-checkbox">
+                                <span>Rubber</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Cardboard" class="service-checkbox">
+                                <span>Cardboard</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" value="Aluminum" class="service-checkbox">
+                                <span>Aluminum</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Rating (1-5)</label>
+                        <input type="number" id="partnerRating" min="1" max="5" step="0.1" value="4.0">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('partnerModal')">Cancel</button>
+                <button class="btn-primary" onclick="savePartner()">Save Partner</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal small">
+            <div class="modal-header">
+                <h3>Confirm Delete</h3>
+                <button class="modal-close" onclick="closeModal('deleteModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="delete-confirmation">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h4>Delete Partner?</h4>
+                    <p>Are you sure you want to delete <strong id="deletePartnerName">this partner</strong>? This action cannot be undone.</p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('deleteModal')">Cancel</button>
+                <button class="btn-danger" onclick="confirmDelete()">Delete Partner</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="admin-partners.js"></script>
+    <script>
+        // Load theme preference on admin partners page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.ThemeManager) {
+                window.ThemeManager.loadUserThemePreference();
+            }
+        });
+    </script>
+</body>
+</html>

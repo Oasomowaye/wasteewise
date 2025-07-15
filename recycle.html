@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycle - WasteWise</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="recycle.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="database.js"></script>
+    <script src="theme-manager.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="brand-name">WASTEWISE</h2>
+            </div>
+            
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1" alt="Adeoye Daniel">
+                </div>
+                <div class="user-info">
+                    <h3>Adeoye Daniel</h3>
+                    <div class="user-rating">
+                        <span class="stars">★★★★★★★★★★</span>
+                    </div>
+                </div>
+                <button class="visibility-btn" id="globalVisibilityBtn">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="transactions.html" class="nav-link">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transactions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="recycle.html" class="nav-link">
+                            <i class="fas fa-recycle"></i>
+                            <span>Recycle</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="recycling-partners.html" class="nav-link">
+                            <i class="fas fa-handshake"></i>
+                            <span>Recycling Partners</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="learn.html" class="nav-link">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Learn</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <ul>
+                    <li class="nav-item">
+                        <a href="settings.html" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Log Out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search...">
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="user-menu">
+                        <img src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&dpr=1" alt="User" class="user-avatar-small">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Recycle Content -->
+            <div class="recycle-content">
+                <div class="recycle-header">
+                    <h1>Recycle</h1>
+                </div>
+                
+                <div class="recycle-main">
+                    <div class="recycle-form-section">
+                        <!-- Service Type Tabs -->
+                        <div class="service-tabs">
+                            <button class="tab-btn active" id="pickupTab">Pickup</button>
+                            <button class="tab-btn" id="dropoffTab">Dropoff</button>
+                        </div>
+                        
+                        <!-- Pickup Form -->
+                        <div class="pickup-form" id="pickupForm">
+                            <div class="pickup-form-left">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        User Address
+                                    </label>
+                                    <input type="text" class="form-input" placeholder="Enter your address">
+                                </div>
+                                
+                                <div class="pickup-note">
+                                    <p>Kindly note that pickup request are only valid for <strong>20kg and above</strong></p>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Pickup Date</label>
+                                    <div class="date-input-wrapper">
+                                        <input type="date" class="form-input date-input">
+                                        <i class="fas fa-calendar-alt date-icon"></i>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Pickup Time (From -To)</label>
+                                    <div class="time-inputs">
+                                        <div class="time-input-wrapper">
+                                            <input type="time" class="form-input time-input">
+                                            <i class="fas fa-clock time-icon"></i>
+                                        </div>
+                                        <div class="time-input-wrapper">
+                                            <input type="time" class="form-input time-input">
+                                            <i class="fas fa-clock time-icon"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button class="request-btn">Request pickup</button>
+                            </div>
+                            
+                            <div class="pickup-form-right">
+                                <div class="pickup-image">
+                                    <img src="https://images.pexels.com/photos/3735218/pexels-photo-3735218.jpeg?auto=compress&cs=tinysrgb&w=600" alt="Recycling pickup">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Dropoff Form -->
+                        <div class="dropoff-form" id="dropoffForm" style="display: none;">
+                            <div class="dropoff-container">
+                                <div class="dropoff-left">
+                                    <div class="address-input-group">
+                                        <label class="form-label">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                            User Address
+                                        </label>
+                                        <input type="text" class="form-input" placeholder="Enter your address">
+                                    </div>
+                                    
+                                    <div class="recycling-centers">
+                                        <h3>Recycling Centers Near You</h3>
+                                        
+                                        <div class="center-item">
+                                            <div class="center-name">Vicfold Recyclers</div>
+                                            <div class="center-address">14 Adebayo Mokuolu Street, Basin Area, Ilorin</div>
+                                            <div class="center-phone">+234 806 488 5401</div>
+                                            <div class="center-arrow">›</div>
+                                        </div>
+                                        
+                                        <div class="center-item">
+                                            <div class="center-name">Evolvers Lead Plastic Recycling</div>
+                                            <div class="center-address">Beside Kwara State Polytechnic Primary School, Egbejila Road, Ilorin</div>
+                                            <div class="center-phone">+234 706 485 1175</div>
+                                            <div class="center-arrow">›</div>
+                                        </div>
+                                        
+                                        <div class="center-item">
+                                            <div class="center-name">Halleluyah Poly Ventures</div>
+                                            <div class="center-address">Pipeline Road, Amoyo, Ilorin</div>
+                                            <div class="center-phone">+234 701 010 5504</div>
+                                            <div class="center-arrow">›</div>
+                                        </div>
+                                        
+                                        <div class="center-item">
+                                            <div class="center-name">A O Bright Books Production</div>
+                                            <div class="center-address">Jaja Street, Adeta, Ilorin</div>
+                                            <div class="center-phone">+234 706 216 6227</div>
+                                            <div class="center-arrow">›</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="dropoff-right">
+                                    <div class="current-prices">
+                                        <h3>Current prices of Waste at Vicfold</h3>
+                                        
+                                        <div class="price-item">
+                                            <div class="price-item-left">
+                                                <div class="price-icon pet">
+                                                    <i class="fas fa-bottle-water"></i>
+                                                </div>
+                                                <span class="price-label">PET</span>
+                                            </div>
+                                            <span class="price-value">#50</span>
+                                        </div>
+                                        
+                                        <div class="price-item">
+                                            <div class="price-item-left">
+                                                <div class="price-icon paper">
+                                                    <i class="fas fa-file-alt"></i>
+                                                </div>
+                                                <span class="price-label">Paper</span>
+                                            </div>
+                                            <span class="price-value">#50</span>
+                                        </div>
+                                        
+                                        <div class="price-item">
+                                            <div class="price-item-left">
+                                                <div class="price-icon carton">
+                                                    <i class="fas fa-box"></i>
+                                                </div>
+                                                <span class="price-label">Carton</span>
+                                            </div>
+                                            <span class="price-value">#50</span>
+                                        </div>
+                                        
+                                        <div class="price-item">
+                                            <div class="price-item-left">
+                                                <div class="price-icon iron">
+                                                    <i class="fas fa-hammer"></i>
+                                                </div>
+                                                <span class="price-label">Iron</span>
+                                            </div>
+                                            <span class="price-value">#50</span>
+                                        </div>
+                                        
+                                        <div class="price-item">
+                                            <div class="price-item-left">
+                                                <div class="price-icon aluminum">
+                                                    <i class="fas fa-can-food"></i>
+                                                </div>
+                                                <span class="price-label">Aluminum</span>
+                                            </div>
+                                            <span class="price-value">#50</span>
+                                        </div>
+                                        
+                                        <div class="price-item">
+                                            <div class="price-item-left">
+                                                <div class="price-icon pure-water">
+                                                    <i class="fas fa-tint"></i>
+                                                </div>
+                                                <span class="price-label">Pure Water Sachet</span>
+                                            </div>
+                                            <span class="price-value">#50</span>
+                                        </div>
+                                        
+                                        <div class="price-item">
+                                            <div class="price-item-left">
+                                                <div class="price-icon rubber">
+                                                    <i class="fas fa-circle"></i>
+                                                </div>
+                                                <span class="price-label">Rubber</span>
+                                            </div>
+                                            <span class="price-value">#50</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="recycle.js"></script>
+    <script>
+        // Load user theme preference on recycle page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.ThemeManager) {
+                window.ThemeManager.loadUserThemePreference();
+            }
+        });
+    </script>
+</body>
+</html>

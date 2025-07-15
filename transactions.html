@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions - WasteWise</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="transactions.css">
+    <link rel="stylesheet" href="dark-mode.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="database.js"></script>
+    <script src="theme-manager.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 class="brand-name">WASTEWISE</h2>
+            </div>
+            
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <img src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1" alt="Adeoye Daniel">
+                </div>
+                <div class="user-info">
+                    <h3>Adeoye Daniel</h3>
+                    <div class="user-rating">
+                        <span class="stars">★★★★★★★★★★</span>
+                    </div>
+                </div>
+                <button class="visibility-btn" id="globalVisibilityBtn">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-item">
+                        <a href="dashboard.html" class="nav-link">
+                            <i class="fas fa-home"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a href="transactions.html" class="nav-link">
+                            <i class="fas fa-exchange-alt"></i>
+                            <span>Transactions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="recycle.html" class="nav-link">
+                            <i class="fas fa-recycle"></i>
+                            <span>Recycle</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="recycling-partners.html" class="nav-link">
+                            <i class="fas fa-handshake"></i>
+                            <span>Recycling Partners</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="learn.html" class="nav-link">
+                            <i class="fas fa-graduation-cap"></i>
+                            <span>Learn</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <ul>
+                    <li class="nav-item">
+                        <a href="settings.html" class="nav-link">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link" id="logoutBtn">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Log Out</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" placeholder="Search transactions..." id="transactionSearchInput">
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <i class="fas fa-bell"></i>
+                    </button>
+                    <div class="user-menu">
+                        <img src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=40&h=40&dpr=1" alt="User" class="user-avatar-small">
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Transactions Content -->
+            <div class="transactions-content">
+                <div class="transactions-header">
+                    <h1>Transaction History</h1>
+                    <p>View and manage all your WasteWise transactions</p>
+                </div>
+                
+                <!-- Transaction Summary -->
+                <div class="transaction-summary">
+                    <div class="summary-card">
+                        <div class="summary-icon income">
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="summary-info">
+                            <h3>Total Income</h3>
+                            <div class="summary-amount" id="totalIncome">₦0.00</div>
+                            <p class="summary-change positive">+12% from last month</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-icon expense">
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="summary-info">
+                            <h3>Total Expenses</h3>
+                            <div class="summary-amount" id="totalExpenses">₦0.00</div>
+                            <p class="summary-change negative">-5% from last month</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-icon balance">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="summary-info">
+                            <h3>Current Balance</h3>
+                            <div class="summary-amount" id="currentBalance">₦0.00</div>
+                            <p class="summary-change positive">Available for withdrawal</p>
+                        </div>
+                    </div>
+                    
+                    <div class="summary-card">
+                        <div class="summary-icon transactions">
+                            <i class="fas fa-list"></i>
+                        </div>
+                        <div class="summary-info">
+                            <h3>Total Transactions</h3>
+                            <div class="summary-amount" id="totalTransactions">0</div>
+                            <p class="summary-change">All time activity</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Filters and Controls -->
+                <div class="transaction-controls">
+                    <div class="filter-section">
+                        <select id="typeFilter">
+                            <option value="">All Types</option>
+                            <option value="recycling">Recycling</option>
+                            <option value="withdrawal">Withdrawal</option>
+                            <option value="deposit">Deposit</option>
+                            <option value="refund">Refund</option>
+                        </select>
+                        
+                        <select id="statusFilter">
+                            <option value="">All Status</option>
+                            <option value="success">Success</option>
+                            <option value="pending">Pending</option>
+                            <option value="failed">Failed</option>
+                            <option value="refund">Refund</option>
+                        </select>
+                        
+                        <select id="dateFilter">
+                            <option value="">All Time</option>
+                            <option value="today">Today</option>
+                            <option value="week">This Week</option>
+                            <option value="month">This Month</option>
+                            <option value="year">This Year</option>
+                        </select>
+                    </div>
+                    
+                    <div class="action-section">
+                        <button class="export-btn" id="exportTransactions">
+                            <i class="fas fa-download"></i>
+                            Export
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Transactions Table -->
+                <div class="transactions-table-section">
+                    <div class="table-container">
+                        <table class="transactions-table">
+                            <thead>
+                                <tr>
+                                    <th>Transaction ID</th>
+                                    <th>Date & Time</th>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="transactionsTableBody">
+                                <!-- Transactions will be loaded dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Pagination -->
+                <div class="pagination" id="transactionsPagination">
+                    <button class="pagination-btn" id="prevPageBtn" disabled>
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </button>
+                    <span class="pagination-info" id="paginationInfo">Page 1 of 1</span>
+                    <button class="pagination-btn" id="nextPageBtn">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Transaction Details Modal -->
+    <div class="modal-overlay" id="transactionDetailsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Transaction Details</h3>
+                <button class="modal-close" onclick="closeModal('transactionDetailsModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="transaction-details-content">
+                    <div class="detail-header">
+                        <div class="detail-id" id="detailTransactionId">WS5221</div>
+                        <div class="detail-status" id="detailStatus">Success</div>
+                    </div>
+                    
+                    <div class="detail-info-grid">
+                        <div class="detail-item">
+                            <span class="detail-label">Date & Time:</span>
+                            <span class="detail-value" id="detailDateTime">Jan 15, 2025 at 2:30 PM</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Type:</span>
+                            <span class="detail-value" id="detailType">Recycling</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Amount:</span>
+                            <span class="detail-value" id="detailAmount">₦150.00</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Description:</span>
+                            <span class="detail-value" id="detailDescription">Plastic recycling payment</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Reference:</span>
+                            <span class="detail-value" id="detailReference">REF123456789</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Balance After:</span>
+                            <span class="detail-value" id="detailBalanceAfter">₦1,250.00</span>
+                        </div>
+                    </div>
+                    
+                    <div class="detail-notes" id="detailNotes">
+                        <h4>Additional Information</h4>
+                        <p>This transaction was processed successfully. No additional action required.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal('transactionDetailsModal')">Close</button>
+                <button class="btn-primary" onclick="downloadReceipt()">Download Receipt</button>
+            </div>
+        </div>
+    </div>
+    
+    <script src="transactions.js"></script>
+    <script>
+        // Load user theme preference on transactions page load
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.ThemeManager) {
+                window.ThemeManager.loadUserThemePreference();
+            }
+        });
+    </script>
+</body>
+</html>
