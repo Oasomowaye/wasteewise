@@ -1,3 +1,119 @@
+// Firebase Auth and Firestore: Load and update user profile
+window.addEventListener('DOMContentLoaded', function() {
+    // Listen for auth state
+    firebase.auth().onAuthStateChanged(async function(user) {
+        if (user) {
+            // Load user info
+            const displayName = user.displayName || '';
+            const photoURL = user.photoURL || 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1';
+            document.getElementById('sidebarUserName').textContent = displayName;
+            document.getElementById('sidebarUserAvatar').src = photoURL;
+            document.getElementById('headerUserAvatar').src = photoURL;
+            document.getElementById('profilePicture').src = photoURL;
+            // Split name for form
+            const nameParts = displayName.split(' ');
+            document.getElementById('firstName').value = nameParts[0] || '';
+            document.getElementById('lastName').value = nameParts.slice(1).join(' ') || '';
+            document.getElementById('email').value = user.email;
+            // Optionally load phone from Firestore
+            const db = firebase.firestore();
+            const userDoc = await db.collection('users').doc(user.uid).get();
+            if (userDoc.exists) {
+                const data = userDoc.data();
+                if (data.phone) document.getElementById('phone').value = data.phone;
+            }
+        } else {
+            window.location.href = 'login.html';
+        }
+    });
+
+    // Profile picture upload functionality
+    window.triggerFileUpload = function() {
+        document.getElementById('profilePictureInput').click();
+    };
+    document.getElementById('profilePictureInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Please select a valid image file.');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                alert('Image size must be less than 5MB.');
+                return;
+            }
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                const imageUrl = e.target.result;
+                // Update UI
+                document.getElementById('sidebarUserAvatar').src = imageUrl;
+                document.getElementById('headerUserAvatar').src = imageUrl;
+                document.getElementById('profilePicture').src = imageUrl;
+                // Update Firebase Auth profile
+                const user = firebase.auth().currentUser;
+                if (user) {
+                    await user.updateProfile({ photoURL: imageUrl });
+                    // Update Firestore user doc
+                    await firebase.firestore().collection('users').doc(user.uid).set({ photoURL: imageUrl }, { merge: true });
+                    alert('Profile picture updated successfully!');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+    window.removeProfilePicture = async function() {
+        const confirmRemove = confirm('Are you sure you want to remove your profile picture?');
+        if (confirmRemove) {
+            const defaultAvatar = 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1';
+            document.getElementById('sidebarUserAvatar').src = defaultAvatar;
+            document.getElementById('headerUserAvatar').src = defaultAvatar;
+            document.getElementById('profilePicture').src = defaultAvatar;
+            const user = firebase.auth().currentUser;
+            if (user) {
+                await user.updateProfile({ photoURL: defaultAvatar });
+                await firebase.firestore().collection('users').doc(user.uid).set({ photoURL: defaultAvatar }, { merge: true });
+                alert('Profile picture removed successfully!');
+            }
+        }
+    };
+    // Profile form submission
+    document.getElementById('profileForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        if (!firstName || !lastName || !email) {
+            alert('Please fill in all required fields.');
+            return;
+        }
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+        const user = firebase.auth().currentUser;
+        if (user) {
+            const displayName = `${firstName} ${lastName}`;
+            await user.updateProfile({ displayName });
+            // Update Firestore user doc
+            await firebase.firestore().collection('users').doc(user.uid).set({ displayName, phone }, { merge: true });
+            document.getElementById('sidebarUserName').textContent = displayName;
+            alert('Profile updated successfully!');
+        }
+    });
+    // Logout functionality
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.firebaseAuth.signOut().then(function() {
+                window.location.href = 'login.html';
+            });
+        });
+    }
+});
+
 // Settings page functionality
 document.addEventListener('DOMContentLoaded', function() {
     // Check if user is logged in

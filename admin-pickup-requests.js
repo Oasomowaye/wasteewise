@@ -1,8 +1,5 @@
 // Admin Pickup Requests Management functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize pickup requests data
-    initializePickupRequestsData();
-    
     // Current editing request
     let currentEditingRequest = null;
     
@@ -48,168 +45,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Initialize pickup requests data if not exists
-    function initializePickupRequestsData() {
-        if (!localStorage.getItem('wastewise_pickup_requests')) {
-            const defaultRequests = [
-                {
-                    id: 'PR-001',
-                    userId: 1,
-                    userName: 'Adeoye Daniel',
-                    userEmail: 'adeoye.daniel@gmail.com',
-                    userPhone: '+234 806 488 5401',
-                    address: '14 Adebayo Mokuolu Street, Basin Area, Ilorin',
-                    pickupDate: '2025-01-15',
-                    pickupTimeFrom: '10:00',
-                    pickupTimeTo: '12:00',
-                    status: 'pending',
-                    priority: 'medium',
-                    notes: 'Please call before arrival. Gate is usually locked.',
-                    createdAt: '2025-01-10T08:30:00Z',
-                    assignedTeam: null,
-                    estimatedWeight: '25kg'
-                },
-                {
-                    id: 'PR-002',
-                    userId: 2,
-                    userName: 'Gabriel Omowaye',
-                    userEmail: 'omowayeayomide3@gmail.com',
-                    userPhone: '+234 706 485 1175',
-                    address: 'Beside Kwara State Polytechnic Primary School, Egbejila Road, Ilorin',
-                    pickupDate: '2025-01-16',
-                    pickupTimeFrom: '14:00',
-                    pickupTimeTo: '16:00',
-                    status: 'approved',
-                    priority: 'high',
-                    notes: 'Large amount of plastic bottles and containers.',
-                    createdAt: '2025-01-11T14:20:00Z',
-                    assignedTeam: 'team-1',
-                    estimatedWeight: '40kg'
-                },
-                {
-                    id: 'PR-003',
-                    userId: 1,
-                    userName: 'Adeoye Daniel',
-                    userEmail: 'adeoye.daniel@gmail.com',
-                    userPhone: '+234 806 488 5401',
-                    address: '14 Adebayo Mokuolu Street, Basin Area, Ilorin',
-                    pickupDate: '2025-01-12',
-                    pickupTimeFrom: '09:00',
-                    pickupTimeTo: '11:00',
-                    status: 'completed',
-                    priority: 'low',
-                    notes: 'Regular weekly pickup.',
-                    createdAt: '2025-01-08T10:15:00Z',
-                    assignedTeam: 'team-2',
-                    estimatedWeight: '20kg',
-                    completedAt: '2025-01-12T10:30:00Z'
-                },
-                {
-                    id: 'PR-004',
-                    userId: 2,
-                    userName: 'Gabriel Omowaye',
-                    userEmail: 'omowayeayomide3@gmail.com',
-                    userPhone: '+234 706 485 1175',
-                    address: 'Beside Kwara State Polytechnic Primary School, Egbejila Road, Ilorin',
-                    pickupDate: '2025-01-17',
-                    pickupTimeFrom: '08:00',
-                    pickupTimeTo: '10:00',
-                    status: 'in-progress',
-                    priority: 'medium',
-                    notes: 'Mixed recyclables including paper and plastic.',
-                    createdAt: '2025-01-12T16:45:00Z',
-                    assignedTeam: 'team-3',
-                    estimatedWeight: '30kg'
-                }
-            ];
-            
-            localStorage.setItem('wastewise_pickup_requests', JSON.stringify(defaultRequests));
+    // Helper: fetch pickup requests from Firestore
+    async function fetchPickupRequests() {
+        if (!window.firebase || !firebase.firestore) {
+            console.error('Firebase Firestore is not available.');
+            return [];
+        }
+        try {
+            const snapshot = await firebase.firestore().collection('pickup_requests').get();
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        } catch (error) {
+            console.error('Error fetching pickup requests from Firestore:', error);
+            return [];
         }
     }
     
-    // Get pickup requests from localStorage
-    function getPickupRequests() {
-        return JSON.parse(localStorage.getItem('wastewise_pickup_requests') || '[]');
-    }
-    
-    // Save pickup requests to localStorage
-    function savePickupRequests(requests) {
-        localStorage.setItem('wastewise_pickup_requests', JSON.stringify(requests));
-    }
-    
-    // Get filtered pickup requests
-    function getFilteredPickupRequests() {
-        const requests = getPickupRequests();
-        const searchQuery = searchInput?.value.toLowerCase() || '';
-        const statusFilterValue = statusFilter?.value || '';
-        const priorityFilterValue = priorityFilter?.value || '';
-        const dateFilterValue = dateFilter?.value || '';
-        
-        return requests.filter(request => {
-            const matchesSearch = !searchQuery || 
-                request.id.toLowerCase().includes(searchQuery) ||
-                request.userName.toLowerCase().includes(searchQuery) ||
-                request.address.toLowerCase().includes(searchQuery) ||
-                request.userEmail.toLowerCase().includes(searchQuery);
-            
-            const matchesStatus = !statusFilterValue || request.status === statusFilterValue;
-            const matchesPriority = !priorityFilterValue || request.priority === priorityFilterValue;
-            
-            let matchesDate = true;
-            if (dateFilterValue) {
-                const requestDate = new Date(request.pickupDate);
-                const today = new Date();
-                const tomorrow = new Date(today);
-                tomorrow.setDate(today.getDate() + 1);
-                
-                switch (dateFilterValue) {
-                    case 'today':
-                        matchesDate = requestDate.toDateString() === today.toDateString();
-                        break;
-                    case 'tomorrow':
-                        matchesDate = requestDate.toDateString() === tomorrow.toDateString();
-                        break;
-                    case 'this-week':
-                        const weekStart = new Date(today);
-                        weekStart.setDate(today.getDate() - today.getDay());
-                        const weekEnd = new Date(weekStart);
-                        weekEnd.setDate(weekStart.getDate() + 6);
-                        matchesDate = requestDate >= weekStart && requestDate <= weekEnd;
-                        break;
-                    case 'next-week':
-                        const nextWeekStart = new Date(today);
-                        nextWeekStart.setDate(today.getDate() + (7 - today.getDay()));
-                        const nextWeekEnd = new Date(nextWeekStart);
-                        nextWeekEnd.setDate(nextWeekStart.getDate() + 6);
-                        matchesDate = requestDate >= nextWeekStart && requestDate <= nextWeekEnd;
-                        break;
-                }
-            }
-            
-            return matchesSearch && matchesStatus && matchesPriority && matchesDate;
-        });
-    }
-    
-    // Update requests statistics
-    function updateRequestsStats() {
-        const requests = getPickupRequests();
-        const pendingCount = requests.filter(r => r.status === 'pending').length;
-        const approvedCount = requests.filter(r => r.status === 'approved' || r.status === 'in-progress').length;
-        const completedCount = requests.filter(r => r.status === 'completed').length;
-        
-        document.getElementById('pendingCount').textContent = `${pendingCount} Pending`;
-        document.getElementById('approvedCount').textContent = `${approvedCount} Approved`;
-        document.getElementById('completedCount').textContent = `${completedCount} Completed`;
-    }
-    
-    // Load pickup requests table
-    function loadPickupRequestsTable() {
+    // Load pickup requests table from Firestore
+    async function loadPickupRequestsTable() {
         const tbody = document.getElementById('pickupRequestsTable');
-        const filteredRequests = getFilteredPickupRequests();
+        const requests = await fetchPickupRequests();
         
         tbody.innerHTML = '';
         
-        if (filteredRequests.length === 0) {
+        if (!requests.length) {
             tbody.innerHTML = `
                 <tr>
                     <td colspan="8">
@@ -225,9 +83,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Sort by creation date (newest first)
-        filteredRequests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         
-        filteredRequests.forEach(request => {
+        requests.forEach(request => {
             const row = createPickupRequestRow(request);
             tbody.appendChild(row);
         });
@@ -478,35 +336,30 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     };
     
-    // Export pickup requests
-    function exportPickupRequests() {
-        const requests = getFilteredPickupRequests();
-        
-        if (requests.length === 0) {
+    // Export pickup requests from Firestore to CSV
+    async function exportPickupRequests() {
+        const requests = await fetchPickupRequests();
+        if (!requests.length) {
             alert('No pickup requests to export.');
             return;
         }
-        
-        // Create CSV content
         const headers = ['Request ID', 'User Name', 'Email', 'Phone', 'Address', 'Pickup Date', 'Pickup Time', 'Status', 'Priority', 'Created Date', 'Notes'];
         const csvContent = [
             headers.join(','),
             ...requests.map(request => [
                 request.id,
-                `"${request.userName}"`,
-                request.userEmail,
-                request.userPhone,
-                `"${request.address}"`,
-                request.pickupDate,
-                `"${request.pickupTimeFrom} - ${request.pickupTimeTo}"`,
-                request.status,
-                request.priority,
-                new Date(request.createdAt).toLocaleDateString(),
+                `"${request.userName || ''}"`,
+                request.userEmail || '',
+                request.userPhone || '',
+                `"${request.address || ''}"`,
+                request.pickupDate || '',
+                `"${request.pickupTimeFrom || ''} - ${request.pickupTimeTo || ''}"`,
+                request.status || '',
+                request.priority || '',
+                request.createdAt ? new Date(request.createdAt).toLocaleDateString() : '',
                 `"${request.notes || ''}"`
             ].join(','))
         ].join('\n');
-        
-        // Download CSV file
         const blob = new Blob([csvContent], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -516,7 +369,6 @@ document.addEventListener('DOMContentLoaded', function() {
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
-        
         alert(`Exported ${requests.length} pickup requests to CSV file.`);
     }
     

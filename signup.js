@@ -39,7 +39,9 @@ passwordInput.addEventListener('input', function() {
     });
 });
 
-// Form submission - Updated to redirect to dashboard
+// Form submission - Updated to use Firebase Auth for email/password registration
+// and Google sign up
+
 document.getElementById('signupForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -65,35 +67,64 @@ document.getElementById('signupForm').addEventListener('submit', function(e) {
         return;
     }
     
-    // Simulate form submission
     const submitBtn = document.querySelector('.signup-submit-btn');
     const originalText = submitBtn.textContent;
-    
     submitBtn.textContent = 'Creating Account...';
     submitBtn.disabled = true;
-    
-    setTimeout(() => {
-        alert(`Welcome to WasteWise, ${firstName}!\n\nYour account has been created successfully. You can now access all WasteWise services.`);
-        
-        // Reset form
-        this.reset();
-        
-        // Reset password requirements display
-        document.querySelectorAll('.requirement').forEach(req => {
-            req.classList.remove('valid');
-            req.querySelector('.requirement-icon').className = 'fas fa-times requirement-icon';
+
+    // Use Firebase Auth for registration
+    window.firebaseAuth.signUpWithEmail(email, password)
+        .then((userCredential) => {
+            // Optionally, update user profile with first and last name
+            return userCredential.user.updateProfile({
+                displayName: `${firstName} ${lastName}`
+            });
+        })
+        .then(() => {
+            alert(`Welcome to WasteWise, ${firstName}!\n\nYour account has been created successfully. You can now access all WasteWise services.`);
+            // Reset form
+            document.getElementById('signupForm').reset();
+            // Reset password requirements display
+            document.querySelectorAll('.requirement').forEach(req => {
+                req.classList.remove('valid');
+                req.querySelector('.requirement-icon').className = 'fas fa-times requirement-icon';
+            });
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            // Redirect to dashboard after successful signup
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+        })
+        .catch((error) => {
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            alert(`Signup failed: ${error.message}`);
         });
-        
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        
-        // Redirect to dashboard after successful signup
-        setTimeout(() => {
-            window.location.href = 'dashboard.html';
-        }, 1000);
-        
-    }, 2000);
 });
+
+// Google sign up handler
+const googleSignupBtn = document.getElementById('googleSignupBtn');
+if (googleSignupBtn) {
+    googleSignupBtn.addEventListener('click', function() {
+        const submitBtn = document.querySelector('.signup-submit-btn');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Signing up with Google...';
+        submitBtn.disabled = true;
+        window.firebaseAuth.signInWithGoogle()
+            .then((result) => {
+                alert('Welcome to WasteWise! You have signed up with your Google account.');
+                window.location.href = 'dashboard.html';
+            })
+            .catch((error) => {
+                alert(`Google signup failed: ${error.message}`);
+            })
+            .finally(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+    });
+}
 
 // Login link handler
 document.querySelector('.login-link-text').addEventListener('click', function(e) {

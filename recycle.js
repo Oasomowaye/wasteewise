@@ -1,10 +1,29 @@
 // Recycle page functionality
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if user is logged in
-    const currentUser = window.WasteWiseDB.getCurrentUser();
-    if (!currentUser) {
-        window.location.href = 'login.html';
-        return;
+    // Check if user is logged in with Firebase Auth
+   function loadUserData() {
+        const currentUser = db.getCurrentUser();
+        if (!currentUser) {
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        const user = db.getUserById(currentUser.id);
+        if (!user) {
+            localStorage.removeItem('wastewise_current_user');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        updateBalanceDisplay(user.balance);
+        updateRecycleDisplay(user.recycledWeight);
+        updatePointsDisplay(user.points);
+        
+        // Update user name in sidebar if it changed
+        const userNameElement = document.querySelector('.user-info h3');
+        if (userNameElement) {
+            userNameElement.textContent = user.name;
+        }
     }
     
     // Tab switching functionality
@@ -38,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Pickup form functionality
     const requestBtn = document.querySelector('.request-btn');
     if (requestBtn) {
-        requestBtn.addEventListener('click', function(e) {
+        requestBtn.addEventListener('click', async function(e) {
             e.preventDefault();
             
             // Get form data
@@ -74,61 +93,54 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
             
-            // Simulate pickup request
+            // Show loading state
             this.classList.add('loading');
             this.textContent = 'Processing Request...';
             this.disabled = true;
             
-            setTimeout(() => {
-                // Create pickup request and save to database
-                const db = window.WasteWiseDB;
-                const currentUser = db.getCurrentUser();
-                
-                if (currentUser) {
-                    const user = db.getUserById(currentUser.id);
-                    
-                    // Generate request ID
-                    const requestId = `PR-${Date.now().toString().slice(-6)}`;
-                    
-                    // Create pickup request object
-                    const pickupRequest = {
-                        id: requestId,
-                        userId: user.id,
-                        userName: user.name,
-                        userEmail: user.email,
-                        userPhone: user.phone || '+234 000 000 0000',
-                        address: address,
-                        pickupDate: date,
-                        pickupTimeFrom: fromTime,
-                        pickupTimeTo: toTime,
-                        status: 'pending',
-                        priority: 'medium',
-                        notes: '',
-                        createdAt: new Date().toISOString(),
-                        estimatedWeight: '20kg'
-                    };
-                    
-                    // Save to pickup requests
-                    const existingRequests = JSON.parse(localStorage.getItem('wastewise_pickup_requests') || '[]');
-                    existingRequests.unshift(pickupRequest);
-                    localStorage.setItem('wastewise_pickup_requests', JSON.stringify(existingRequests));
-                    
-                    alert(`Pickup Request Submitted Successfully!\n\nRequest ID: ${requestId}\nAddress: ${address}\nDate: ${date}\nTime: ${fromTime} - ${toTime}\n\nYou will receive a confirmation email shortly. Our team will contact you 24 hours before the scheduled pickup.`);
-                } else {
-                    alert(`Pickup Request Submitted Successfully!\n\nDetails:\nAddress: ${address}\nDate: ${date}\nTime: ${fromTime} - ${toTime}\n\nYou will receive a confirmation email shortly. Our team will contact you 24 hours before the scheduled pickup.`);
+            try {
+                // Get Firebase user
+                const user = firebase.auth().currentUser;
+                if (!user) {
+                    alert('Please log in to submit a pickup request.');
+                    this.classList.remove('loading');
+                    this.textContent = 'Request pickup';
+                    this.disabled = false;
+                    return;
                 }
+                
+                // Create pickup request object
+                const pickupRequest = {
+                    userId: user.uid,
+                    userName: user.displayName || user.email,
+                    userEmail: user.email,
+                    address: address,
+                    pickupDate: date,
+                    pickupTimeFrom: fromTime,
+                    pickupTimeTo: toTime,
+                    status: 'pending',
+                    priority: 'medium',
+                    notes: '',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    estimatedWeight: '20kg'
+                };
+                
+                // Store in Firestore
+                const docRef = await firebase.firestore().collection('pickup_requests').add(pickupRequest);
+                alert(`Pickup Request Submitted Successfully!\n\nRequest ID: ${docRef.id}\nAddress: ${address}\nDate: ${date}\nTime: ${fromTime} - ${toTime}\n\nYou will receive a confirmation email shortly. Our team will contact you 24 hours before the scheduled pickup.`);
                 
                 // Reset form
                 document.querySelector('.pickup-form .form-input').value = '';
                 document.querySelector('.date-input').value = '';
                 timeInputs[0].value = '';
                 timeInputs[1].value = '';
-                
-                // Reset button
+            } catch (error) {
+                alert('An error occurred while submitting your request. Please try again.' + error.message);
+            } finally {
                 this.classList.remove('loading');
                 this.textContent = 'Request pickup';
                 this.disabled = false;
-            }, 2000);
+            }
         });
     }
     
@@ -314,3 +326,39 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('WasteWise Recycle page loaded successfully!');
 });
+
+// Listen for auth state
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        // Update user name and photo from Firebase Auth
+        var displayName = user.displayName || user.email || 'User';
+        var photoURL = user.photoURL || 'https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1';
+        // Sidebar name
+        var sidebarName = document.querySelector('.user-info h3');
+        if (sidebarName) sidebarName.textContent = displayName;
+        // Welcome section
+        var welcomeName = document.querySelector('.welcome-section h1');
+        if (welcomeName) welcomeName.textContent = `Hello, ${displayName}`;
+        // Card holder name
+        var cardHolder = document.getElementById('cardholdername');
+        if (cardHolder) cardHolder.textContent = displayName.toUpperCase();
+        // User photo (sidebar and header)
+        var avatar = document.querySelector('.user-avatar img');
+        if (avatar) avatar.src = photoURL;
+        var avatarSmall = document.querySelector('.user-avatar-small');
+        if (avatarSmall) avatarSmall.src = photoURL;
+    } else {
+        // Not logged in, redirect to login
+        window.location.href = 'login.html';
+    }
+});
+// Logout button
+var logoutBtn = document.getElementById('logoutBtn');
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.firebaseAuth.signOut().then(function() {
+            window.location.href = 'login.html';
+        });
+    });
+}

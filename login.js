@@ -12,7 +12,8 @@ document.getElementById('loginPasswordToggle').addEventListener('click', functio
     }
 });
 
-// Form submission - Updated to use database authentication
+// Form submission - Updated to use Firebase Auth for email/password login
+
 document.getElementById('loginForm').addEventListener('submit', function(e) {
     e.preventDefault();
     
@@ -33,57 +34,51 @@ document.getElementById('loginForm').addEventListener('submit', function(e) {
         return;
     }
     
-    // Simulate login process
     const submitBtn = document.querySelector('.login-submit-btn');
     const originalText = submitBtn.textContent;
-    
     submitBtn.textContent = 'Logging in...';
     submitBtn.disabled = true;
-    
-    setTimeout(() => {
-        // Initialize database if not already done
-        if (!window.WasteWiseDB) {
-            // Load database script dynamically if not loaded
-            const script = document.createElement('script');
-            script.src = 'database.js';
-            script.onload = function() {
-                performLogin(email, password, submitBtn, originalText);
-            };
-            document.head.appendChild(script);
-        } else {
-            performLogin(email, password, submitBtn, originalText);
-        }
-    }, 1000);
+
+    // Use Firebase Auth for login
+    window.firebaseAuth.loginWithEmail(email, password)
+        .then((userCredential) => {
+            alert(`Welcome back, ${userCredential.user.displayName || userCredential.user.email}!`);
+            document.getElementById('loginForm').reset();
+            submitBtn.textContent = 'Success!';
+            submitBtn.style.background = '#10b981';
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 500);
+        })
+        .catch((error) => {
+            alert(`Login failed: ${error.message}`);
+            submitBtn.textContent = originalText;
+            submitBtn.disabled = false;
+            submitBtn.style.background = '#22c55e';
+        });
 });
 
-function performLogin(email, password, submitBtn, originalText) {
-    const db = window.WasteWiseDB;
-    
-    // Authenticate user
-    const user = db.authenticateUser(email, password);
-    
-    if (user) {
-        // Successful login
-        alert(`Welcome back, ${user.name}!\n\nYou have successfully logged into your WasteWise account.\n\nBalance: ₦${user.balance.toFixed(2)}\nPoints: ${user.points}`);
-        
-        // Reset form
-        document.getElementById('loginForm').reset();
-        
-        submitBtn.textContent = 'Success!';
-        submitBtn.style.background = '#10b981';
-        
-        // Redirect to dashboard after successful login
-        setTimeout(() => {
-            window.location.href = 'dashboard.html';
-        }, 500); // Faster redirect
-    } else {
-        // Failed login
-        alert('Invalid email or password. Please try again.\n\nDemo accounts:\n• adeoye.daniel@gmail.com / password123\n• omowayeayomide3@gmail.com / password123');
-        
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        submitBtn.style.background = '#22c55e';
-    }
+// Google login handler
+const googleLoginBtn = document.getElementById('googleLoginBtn');
+if (googleLoginBtn) {
+    googleLoginBtn.addEventListener('click', function() {
+        const submitBtn = document.querySelector('.login-submit-btn');
+        const originalText = submitBtn.textContent;
+        submitBtn.textContent = 'Logging in with Google...';
+        submitBtn.disabled = true;
+        window.firebaseAuth.signInWithGoogle()
+            .then((result) => {
+                alert('Welcome to WasteWise! You have logged in with your Google account.');
+                window.location.href = 'dashboard.html';
+            })
+            .catch((error) => {
+                alert(`Google login failed: ${error.message}`);
+            })
+            .finally(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+    });
 }
 
 // Forgot password functionality

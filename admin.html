@@ -8,7 +8,11 @@
     <link rel="stylesheet" href="dark-mode.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="database.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase.js"></script>
+
     <script src="admin-auth.js"></script>
     <script src="theme-manager.js"></script>
 </head>
@@ -402,10 +406,11 @@
             </div>
             <div class="modal-footer">
                 <button class="btn-secondary" onclick="closeModal('addBalanceModal')">Cancel</button>
-                <button class="btn-primary" onclick="saveBulkBalance()">Add Balance</button>
+                <button class="btn-primary" onclick="saveBulkBalance();">Add Balance</button>
             </div>
         </div>
     </div>
+    
     
     <script src="admin.js"></script>
     <script>

@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="dark-mode.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script src="database.js"></script>
+       <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="firebase.js"></script>
     <script src="theme-manager.js"></script>
 </head>
 <body>
@@ -24,7 +27,7 @@
                     <img src="https://images.pexels.com/photos/1040880/pexels-photo-1040880.jpeg?auto=compress&cs=tinysrgb&w=100&h=100&dpr=1" alt="Adeoye Daniel">
                 </div>
                 <div class="user-info">
-                    <h3>Adeoye Daniel</h3>
+                    <h3></h3>
                     <div class="user-rating">
                         <span class="stars">★★★★★★★★★★</span>
                     </div>
@@ -112,7 +115,7 @@
             <div class="dashboard-content">
                 <!-- Welcome Section -->
                 <div class="welcome-section">
-                    <h1>Hello, Adeoye Daniel</h1>
+                    <h1>Hello, </h1>
                     <p>Welcome to your WasteWise Management Dashboard</p>
                 </div>
                 
@@ -133,7 +136,7 @@
                             <p>You've earned <strong id="monthlyEarnings">₦0.00</strong> this month</p>
                         </div>
                         <div class="exchange-section">
-                            <button class="exchange-btn" id="withdrawBtn">
+                            <button class="exchange-btn" onclick="openModal('withdrawalModal')">
                                 <i class="fas fa-exchange-alt"></i>
                                 Withdraw
                             </button>
@@ -166,15 +169,17 @@
                         
                         <div class="table-container">
                             <table class="exchange-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID Transaction</th>
-                                        <th>Date</th>
-                                        <th>Time</th>
-                                        <th>Amount</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
+                               <thead>
+                                <tr>
+                                    <th>Request ID</th>
+                                    <th>User</th>
+                                    <th>Amount</th>
+                                    <th>Recycle Weight</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
                                 <tbody id="exchangeLogTable">
                                     <tr>
                                         <td>WS5221</td>
@@ -262,7 +267,7 @@
                                 <div class="card-footer">
                                     <div class="card-holder">
                                         <small>CARD HOLDER</small>
-                                        <div>ADEOYE DANIEL</div>
+                                        <div id="cardholdername"></div>
                                     </div>
                                 </div>
                             </div>
@@ -438,11 +443,12 @@
                 </div>
                 <div class="modal-footer">
                     <button class="btn-secondary" onclick="closeModal('withdrawalModal')">Cancel</button>
-                    <button class="btn-primary" onclick="processWithdrawal()" id="processWithdrawalBtn">Process Withdrawal</button>
+                    <button class="btn-primary" onclick="processWithdrawal()" >Process Withdrawal</button>
                 </div>
             </div>
         </div>
     
+   
     <script src="dashboard.js"></script>
     <script>
         // Load user theme preference on dashboard load
